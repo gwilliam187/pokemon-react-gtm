@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
+import TagManager from "react-gtm-module";
 import { css } from "@emotion/react";
 
 import BackButton from "components/BackButton";
@@ -34,9 +35,35 @@ const PokemonDetailPage = () => {
     }
   );
 
+  useEffect(() => {
+    if (!data) return;
+
+    TagManager.dataLayer({
+      dataLayer: {
+        event: "view_pokemon",
+        entity_id: data.pokemon.id,
+        entity_name: data.pokemon.name,
+      },
+    });
+  }, [data]);
+
   const handleCatchClick = () => {
+    TagManager.dataLayer({
+      dataLayer: {
+        event: "attempt_catch",
+        entity_id: data?.pokemon.id,
+        entity_name: data?.pokemon.name,
+      },
+    });
     if (Math.random() > 0.5) {
       setIsSuccessful(true);
+      TagManager.dataLayer({
+        dataLayer: {
+          event: "catch_success",
+          entity_id: data?.pokemon.id,
+          entity_name: data?.pokemon.name,
+        },
+      });
     } else {
       setIsSuccessful(false);
     }

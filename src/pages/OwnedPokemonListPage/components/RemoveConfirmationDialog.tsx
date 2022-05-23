@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import TagManager from "react-gtm-module";
 import { css } from "@emotion/react";
 
 import Button from "components/Button";
@@ -26,6 +27,18 @@ const RemoveConfirmationDialog = ({
 }: TRemoveConfirmationDialogProps) => {
   if (!isOpen) return null;
 
+  const onReleaseClick = () => {
+    pokemon && removePokemon(pokemon.key);
+    handleClose();
+    TagManager.dataLayer({
+      dataLayer: {
+        event: "release_pokemon",
+        entity_id: pokemon?.pokemon.id,
+        entity_name: pokemon?.pokemon.name,
+      },
+    });
+  };
+
   return (
     <Dialog isOpen={isOpen}>
       <div
@@ -50,10 +63,7 @@ const RemoveConfirmationDialog = ({
         <p>This action cannot be undone!</p>
         <div>
           <Button
-            onClick={() => {
-              pokemon && removePokemon(pokemon.key);
-              handleClose();
-            }}
+            onClick={onReleaseClick}
             color="secondary"
             style={{ marginRight: "0.5rem" }}
           >

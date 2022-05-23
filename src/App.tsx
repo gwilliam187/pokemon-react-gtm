@@ -2,12 +2,17 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { ApolloProvider } from "@apollo/client";
+import TagManager from "react-gtm-module";
 import { css } from "@emotion/react";
 
 import AppContext, { TOwnedPokemons } from "./AppContext";
 import { ROUTE_LIST } from "utils/routes";
 import { client } from "utils/apollo";
 import { TPokemon } from "pages/PokemonDetailPage/graphql";
+
+TagManager.initialize({
+  gtmId: "GTM-5P5NMTJ",
+});
 
 function App() {
   const [ownedPokemons, setOwnedPokemons] = useState<TOwnedPokemons>({});
